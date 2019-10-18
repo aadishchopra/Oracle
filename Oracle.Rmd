@@ -1,0 +1,58 @@
+---
+title: "Oracle"
+author: "Aadish Chopra"
+date: "10/18/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE,message = FALSE,warning = FALSE)
+```
+
+
+Assume, Average Rating to be the selection criterion (higher is better).
+
+ 
+
+Find  Top 3 movies
+
+by Occupation
+
+by Genre
+
+by Occupation, Genre
+
+by Age group  [ <=6, <=12 <=18, <=30, <=50, 50+]
+
+Find Top 3 genres released  (release date )in Summer [May – July]
+
+For each genre, find co-occurring (top 2 )genres
+
+ 
+
+Extra Credit:  For each user, find another one with similar preference [same movies, similar ratings]
+
+
+# Extracting the Data
+
+1. We will use the links present to extract the data 
+2. Column Names from the readme file
+
+```{r}
+
+U.Data<-read.csv("http://files.grouplens.org/datasets/movielens/ml-100k/u.data",header = FALSE,sep = "|",col.names = c("User_ID","Item_ID","Rating","TimeStamp"))
+
+U.Item<-read.csv("http://files.grouplens.org/datasets/movielens/ml-100k/u.item",header=FALSE,sep="|",col.names = c("movie_id","movie_title","release_date","video_release_date","IMDb URL", "unknown","Action","Adventure","Animation","Children's","Comedy","Crime",    "Documentary","Drama","Fantasy","Film-Noir","Horror","Musical","Mystery","Romance"     ,"Sci-Fi","Thriller","War","Western"))
+
+U.Item<-U.Item[,-4]
+
+U.User<-read.csv("http://files.grouplens.org/datasets/movielens/ml-100k/u.user",header=FALSE,sep="|",col.names = c("User_ID","age","gende","occupation","zip code"))
+
+
+U.Genres<-read.csv("http://files.grouplens.org/datasets/movielens/ml-100k/u.genre",header=FALSE,sep="|",col.names = c("genre","Number"))
+
+
+
+```
+
+1. U.Item had no data for video release date which had to be removed
