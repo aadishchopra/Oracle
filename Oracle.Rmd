@@ -173,8 +173,47 @@ Top3OccupationGenre<-Top3OccupationGenre[with(Top3OccupationGenre,order(occupati
 Top3OccupationGenre<-aggregate(Top3OccupationGenre,by=list(Top3OccupationGenre$occupation,Top3OccupationGenre$genre_transformed),FUN=head, n=3)
 
 
+```
+
+#### Top 3 Movies by Age Group 
+
+Need to Segment Age Groups 
+
+```{r}
+
+# find the oldest user
+
+max_age=max(U.User$age)
+
+U.User$age_bracket<- cut(U.User$age, breaks = c(0,6, 12, 18, 30, 50,(max_age+1)),
+      labels = c("0-6", "6-12", "12-18", "18-30","30-50","50+"),
+      right = T)
+
+# grouping by Age bracket
 
 
+UAgeUser<-merge(U.User,U.Data,by.x ="User_ID",by.y = "User_ID" )
+groupby<-by(UAgeUser,list(UAgeUser$age_bracket,UAgeUser$Item_ID),FUN = function(x) 
+  {
+  data.frame(age_bracket=unique(x$age_bracket),
+  Item_ID=unique(x$Item_ID),
+  mean_rating=mean(x$Rating),
+  Count_Item_ID=nrow(x)
+  )
+  })
+
+Top3Age_Group<-do.call(rbind,groupby)
+  Top3Age_Group<-Top3Age_Group[with(Top3Age_Group,order(age_bracket,-mean_rating,-Count_Item_ID)),]
+
+
+# pick top 3 
+
+Top3Age_Group<-by(Top3Age_Group,list(Top3Age_Group$age_bracket),head,n=3) 
+Top3Age_Group<-do.call(rbind.data.frame,Top3Age_Group)
+
+rownames(Top3Age_Group)<-NULL
 
 ```
+
+
 
