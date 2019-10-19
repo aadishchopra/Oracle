@@ -102,6 +102,12 @@ Assumptions:
 
 ```{r}
 
+#reversing one-hot encoding to match to the dataset
+
+rev_one_hot<-as.data.frame(which(U.Item[,5:23]==1,arr.ind = T))
+rev_one_hot$genre_transformed<-names(U.Item[,5:23])[rev_one_hot[order(rev_one_hot[,1]),2]]
+
+Genre<-merge(U.Item,rev_one_hot,by.x = "movie_id",by.y = "row")
 
 
 ```
