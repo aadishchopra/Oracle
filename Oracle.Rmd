@@ -106,11 +106,46 @@ Assumptions:
 
 rev_one_hot<-as.data.frame(which(U.Item[,5:23]==1,arr.ind = T))
 rev_one_hot$genre_transformed<-names(U.Item[,5:23])[rev_one_hot[order(rev_one_hot[,1]),2]]
-
 Genre<-merge(U.Item,rev_one_hot,by.x = "movie_id",by.y = "row")
 
 
 ```
 
 
+Selecting relevant columns from Genre
+
+
+```{r}
+# merging Genre with UData on Item Id 
+UGenre<-Genre[,c(1,2,25)]
+UGenreUser<-merge(UGenre,U.Data,by.x ="movie_id",by.y = "Item_ID" )
+
+#group by Genre
+
+groupby<-by(UGenreUser,list(UGenreUser$genre_transformed,UGenreUser$movie_id),FUN = function(x) 
+  {
+  data.frame(genre_transformed=unique(x$genre_transformed),
+  Item_ID=unique(x$movie_id),
+  mean_rating=mean(x$Rating),
+  Count_Item_ID=nrow(x)
+  )
+  })
+
+Top3Genre<-do.call(rbind,groupby)
+Top3Genre<-Top3Genre[with(Top3Genre,order(genre_transformed,-mean_rating,-Count_Item_ID)),]
+
+
+# pick top 3 
+
+Top3Genre<-by(Top3Genre,list(Top3Genre$genre_transformed),head,n=3) 
+Top3Genre<-do.call(rbind.data.frame,Top3Genre)
+
+
+```
+
+
+
+```{r}
+
+```
 
