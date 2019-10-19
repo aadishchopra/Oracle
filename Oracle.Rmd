@@ -169,14 +169,8 @@ groupby<-by(UGenreUser_Occupation,list(UGenreUser_Occupation$occupation,UGenreUs
 Top3OccupationGenre<-do.call(rbind,groupby)
 Top3OccupationGenre<-Top3OccupationGenre[with(Top3OccupationGenre,order(occupation,genre_transformed,-mean_rating,-Count_Item_ID)),]
 
-split(Top3OccupationGenre,f = c(Top3OccupationGenre$occupation,Top3OccupationGenre$genre_transformed))
 
-groupby_head<-lapply(split(Top3OccupationGenre,f = c(Top3OccupationGenre$occupation,Top3OccupationGenre$genre_transformed))
-, head,n=3)
-
-Top3OccupationGenre1<-do.call(rbind,groupby_head)
-
-alias<-aggregate(Top3OccupationGenre,by=list(Top3OccupationGenre$occupation,Top3OccupationGenre$genre_transformed),FUN=head, n=3)
+Top3OccupationGenre<-aggregate(Top3OccupationGenre,by=list(Top3OccupationGenre$occupation,Top3OccupationGenre$genre_transformed),FUN=head, n=3)
 
 
 
