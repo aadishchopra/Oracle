@@ -215,7 +215,7 @@ rownames(Top3Age_Group)<-NULL
 ```
 
 
-#### Top 3 Movies released in Summer 
+#### Top 3 Movies by Genre released in Summer 
 
 Using the release date column to find movies released in Summer
 
@@ -224,14 +224,37 @@ Using the release date column to find movies released in Summer
 
 #subsetting the data frame by selecting movies released in Summer
 
-U.Item$release_date<-as.Date(U.Item$release_date,format="%d-%b-%y")
-U.Item$release_date<-format (U.Item$release_date, "%b")
-U_Summer_Item<-U.Item[U.Item$release_date %in% c("May","June","July"),]
+Genre$release_date<-as.Date(Genre$release_date,format="%d-%b-%y")
+Genre$release_date<-format (Genre$release_date, "%b")
+Genre_Summer<-Genre[Genre$release_date %in% c("May","June","July"),]
+
+Genre_Summer<-Genre_Summer[,c(1:3,25)]
 
 # merging data 
 
-merge(U_Summer_Item,)
+Genre_Summer<-merge(Genre_Summer,U.Data,by.x = "movie_id","Item_ID")
 
+# group by Genre
+
+groupby<-by(Genre_Summer,list(Genre_Summer$genre_transformed,Genre_Summer$movie_id),FUN = function(x) 
+  {
+  data.frame(genre_transformed=unique(x$genre_transformed),
+  Item_ID=unique(x$movie_id),
+  mean_rating=mean(x$Rating),
+  Count_Item_ID=nrow(x)
+  )
+  })
+
+Top3Genre_Summer<-do.call(rbind,groupby)
+Top3Genre_Summer<-Top3Genre_Summer[with(Top3Genre_Summer,order(genre_transformed,-mean_rating,-Count_Item_ID)),]
+
+
+# pick top 3 
+
+Top3Genre_Summer<-by(Top3Genre_Summer,list(Top3Genre_Summer$genre_transformed),head,n=3) 
+Top3Genre_Summer<-do.call(rbind.data.frame,Top3Genre_Summer)
+
+rownames(Top3Genre_Summer)<-NULL
 
 ```
 
