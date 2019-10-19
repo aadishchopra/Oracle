@@ -215,7 +215,7 @@ rownames(Top3Age_Group)<-NULL
 ```
 
 
-#### Top 3 Movies by Genre released in Summer 
+#### Top 3 Genres released in Summer 
 
 Using the release date column to find movies released in Summer
 
@@ -261,6 +261,22 @@ rownames(Top3Genre_Summer)<-NULL
 
 
 ```{r}
+groupby<-by(Genre_Summer,list(Genre_Summer$genre_transformed),FUN = function(x) 
+  {
+  data.frame(genre_transformed=unique(x$genre_transformed),
+  mean_rating=mean(x$Rating),
+  Count_Item_ID=nrow(x)
+  )
+  })
 
+Top3Genre_Summer<-do.call(rbind,groupby)
+Top3Genre_Summer<-Top3Genre_Summer[with(Top3Genre_Summer,order(-mean_rating,-Count_Item_ID)),]
+
+
+# pick top 3 
+
+Top3Genre_Summer<-head(Top3Genre_Summer,n = 3) 
+rownames(Top3Genre_Summer)<-NULL
 ```
+
 
