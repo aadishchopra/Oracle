@@ -40,13 +40,13 @@ Extra Credit:  For each user, find another one with similar preference [same mov
 
 ```{r}
 
-U.Data<-read.csv("http://files.grouplens.org/datasets/movielens/ml-100k/u.data",header = FALSE,sep = "|",col.names = c("User_ID","Item_ID","Rating","TimeStamp"))
+U.Data<-read.csv("http://files.grouplens.org/datasets/movielens/ml-100k/u.data",header = FALSE,sep = "\t",col.names = c("User_ID","Item_ID","Rating","TimeStamp"))
 
 U.Item<-read.csv("http://files.grouplens.org/datasets/movielens/ml-100k/u.item",header=FALSE,sep="|",col.names = c("movie_id","movie_title","release_date","video_release_date","IMDb URL", "unknown","Action","Adventure","Animation","Children's","Comedy","Crime",    "Documentary","Drama","Fantasy","Film-Noir","Horror","Musical","Mystery","Romance"     ,"Sci-Fi","Thriller","War","Western"))
 
 U.Item<-U.Item[,-4]
 
-U.User<-read.csv("http://files.grouplens.org/datasets/movielens/ml-100k/u.user",header=FALSE,sep="|",col.names = c("User_ID","age","gende","occupation","zip code"))
+U.User<-read.csv("http://files.grouplens.org/datasets/movielens/ml-100k/u.user",header=FALSE,sep="|",col.names = c("User_ID","age","gender","occupation","zip code"))
 
 
 U.Genres<-read.csv("http://files.grouplens.org/datasets/movielens/ml-100k/u.genre",header=FALSE,sep="|",col.names = c("genre","Number"))
@@ -56,3 +56,50 @@ U.Genres<-read.csv("http://files.grouplens.org/datasets/movielens/ml-100k/u.genr
 ```
 
 1. U.Item had no data for video release date which had to be removed
+
+
+# Programming Assignments
+
+Note: Assume, Average Rating to be the selection criterion (higher is better).
+
+Question 1 : Find  Top 3 movies by Occupation
+
+
+```{r}
+#merge the dataset
+
+UData_User<-merge(U.Data,y = U.User,by = "User_ID")
+
+top3<-function(x,cname)
+{
+  
+  x=sort((x[,cname]),decreasing = T)
+
+}
+
+t<-by(UData_User,list(UData_User$occupation,UData_User$Item_ID),FUN = function(x) 
+  {
+  data.frame(occupation=unique(x$occupation),
+  Item_ID=unique(x$Item_ID),
+  mean_rating=mean(x$Rating)    
+  )
+  })
+
+df<-do.call(rbind,t)
+
+
+
+```
+
+
+
+
+
+```{r}
+
+UData_User_Sorted<-UData_User[with(UData_User,order(-occupation,-Rating)),]
+
+```
+
+
+
