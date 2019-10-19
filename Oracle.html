@@ -414,7 +414,8 @@ U.Genres&lt;-read.csv(&quot;http://files.grouplens.org/datasets/movielens/ml-100
 <div id="programming-assignments" class="section level1">
 <h1>Programming Assignments</h1>
 <p>Note: Assume, Average Rating to be the selection criterion (higher is better).</p>
-<p>Question 1 : Find Top 3 movies by Occupation</p>
+<div id="top-3-movies-by-occupation" class="section level4">
+<h4>Top 3 movies by Occupation</h4>
 <pre class="r"><code>#merge the dataset
 
 UData_User&lt;-merge(U.Data,y = U.User,by = &quot;User_ID&quot;)
@@ -430,13 +431,54 @@ groupby&lt;-by(UData_User,list(UData_User$occupation,UData_User$Item_ID),FUN = f
   })
 
 Top3Occupation&lt;-do.call(rbind,groupby)
-Top3Occupation&lt;-Top3Occupation[with(Top3Occupation,order(occupation,-mean_rating,-Count_Item_ID)),]</code></pre>
+Top3Occupation&lt;-Top3Occupation[with(Top3Occupation,order(occupation,-mean_rating,-Count_Item_ID)),]
+
+
+# pick top 3 
+
+Top3Occupation&lt;-by(Top3Occupation,list(Top3Occupation$occupation),head,n=3) 
+Top3Occupation&lt;-do.call(rbind.data.frame,Top3Occupation)</code></pre>
 <p>Assumptions:</p>
 <ol style="list-style-type: decimal">
 <li>Ties are broken by counts.</li>
 <li>Secondary level ties are ignored and the item which comes first is selected</li>
 </ol>
-<pre class="r"><code>UData_User_Sorted&lt;-UData_User[with(UData_User,order(-occupation,-Rating)),]</code></pre>
+</div>
+<div id="top-3-movies-by-genre" class="section level4">
+<h4>Top 3 movies by Genre</h4>
+<pre class="r"><code>#reversing one-hot encoding to match to the dataset
+
+rev_one_hot&lt;-as.data.frame(which(U.Item[,5:23]==1,arr.ind = T))
+rev_one_hot$genre_transformed&lt;-names(U.Item[,5:23])[rev_one_hot[order(rev_one_hot[,1]),2]]
+Genre&lt;-merge(U.Item,rev_one_hot,by.x = &quot;movie_id&quot;,by.y = &quot;row&quot;)</code></pre>
+<p>Selecting relevant columns from Genre</p>
+<pre class="r"><code># merging Genre with UData on Item Id 
+UGenre&lt;-Genre[,c(1,2,25)]
+UGenreUser&lt;-merge(UGenre,U.Data,by.x =&quot;movie_id&quot;,by.y = &quot;Item_ID&quot; )
+
+#group by Genre
+
+groupby&lt;-by(UGenreUser,list(UGenreUser$genre_transformed,UGenreUser$movie_id),FUN = function(x) 
+  {
+  data.frame(genre_transformed=unique(x$genre_transformed),
+  Item_ID=unique(x$movie_id),
+  mean_rating=mean(x$Rating),
+  Count_Item_ID=nrow(x)
+  )
+  })
+
+Top3Genre&lt;-do.call(rbind,groupby)
+Top3Genre&lt;-Top3Genre[with(Top3Genre,order(genre_transformed,-mean_rating,-Count_Item_ID)),]
+
+
+# pick top 3 
+
+Top3Genre&lt;-by(Top3Genre,list(Top3Genre$genre_transformed),head,n=3) 
+Top3Genre&lt;-do.call(rbind.data.frame,Top3Genre)</code></pre>
+</div>
+<div id="top-3-movies-by-occupationgenre" class="section level4">
+<h4>Top 3 movies by Occupation,Genre</h4>
+</div>
 </div>
 
 

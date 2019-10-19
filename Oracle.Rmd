@@ -62,7 +62,7 @@ U.Genres<-read.csv("http://files.grouplens.org/datasets/movielens/ml-100k/u.genr
 
 Note: Assume, Average Rating to be the selection criterion (higher is better).
 
-####  Find  Top 3 movies by Occupation
+#### Top 3 movies by Occupation
 
 
 ```{r}
@@ -98,7 +98,7 @@ Assumptions:
 1. Ties are broken by counts. 
 2. Secondary level ties are ignored and the item which comes first is selected
 
-####  Find  Top 3 movies by Genre
+#### Top 3 movies by Genre
 
 ```{r}
 
@@ -144,8 +144,43 @@ Top3Genre<-do.call(rbind.data.frame,Top3Genre)
 ```
 
 
+#### Top 3 movies by Occupation,Genre
+
+
+Merging The UGenreUser Data which was calculated as a step for Top3 Movies by Genre with U.User which holds information for User
 
 ```{r}
+# merging data 
+
+UGenreUser_Occupation<-merge(UGenreUser,U.User,by="User_ID")
+
+#  group by occupation,genre
+
+groupby<-by(UGenreUser_Occupation,list(UGenreUser_Occupation$occupation,UGenreUser_Occupation$genre_transformed,UGenreUser_Occupation$movie_id),FUN = function(x) 
+  {
+  data.frame(occupation=unique(x$occupation),
+  genre_transformed=unique(x$genre_transformed),
+  movie_id=unique(x$movie_id),
+  mean_rating=mean(x$Rating),
+  Count_Item_ID=nrow(x)
+  )
+  })
+
+Top3OccupationGenre<-do.call(rbind,groupby)
+Top3OccupationGenre<-Top3OccupationGenre[with(Top3OccupationGenre,order(occupation,genre_transformed,-mean_rating,-Count_Item_ID)),]
+
+split(Top3OccupationGenre,f = c(Top3OccupationGenre$occupation,Top3OccupationGenre$genre_transformed))
+
+groupby_head<-lapply(split(Top3OccupationGenre,f = c(Top3OccupationGenre$occupation,Top3OccupationGenre$genre_transformed))
+, head,n=3)
+
+Top3OccupationGenre1<-do.call(rbind,groupby_head)
+
+alias<-aggregate(Top3OccupationGenre,by=list(Top3OccupationGenre$occupation,Top3OccupationGenre$genre_transformed),FUN=head, n=3)
+
+
+
+
 
 ```
 
