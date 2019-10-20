@@ -9,33 +9,9 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE,message = FALSE,warning = FALSE)
 ```
 
+# Loading Data
 
-Assume, Average Rating to be the selection criterion (higher is better).
-
- 
-
-Find  Top 3 movies
-
-by Occupation
-
-by Genre
-
-by Occupation, Genre
-
-by Age group  [ <=6, <=12 <=18, <=30, <=50, 50+]
-
-Find Top 3 genres released  (release date )in Summer [May – July]
-
-For each genre, find co-occurring (top 2 )genres
-
- 
-
-Extra Credit:  For each user, find another one with similar preference [same movies, similar ratings]
-
-
-# Extracting the Data
-
-1. We will use the links present to extract the data 
+1.  [Links are used to extract the data](files.grouplens.org/datasets/movielens/)
 2. Column Names from the readme file
 
 ```{r}
@@ -43,8 +19,6 @@ Extra Credit:  For each user, find another one with similar preference [same mov
 U.Data<-read.csv("http://files.grouplens.org/datasets/movielens/ml-100k/u.data",header = FALSE,sep = "\t",col.names = c("User_ID","Item_ID","Rating","TimeStamp"))
 
 U.Item<-read.csv("http://files.grouplens.org/datasets/movielens/ml-100k/u.item",header=FALSE,sep="|",col.names = c("movie_id","movie_title","release_date","video_release_date","IMDb URL", "unknown","Action","Adventure","Animation","Children's","Comedy","Crime",    "Documentary","Drama","Fantasy","Film-Noir","Horror","Musical","Mystery","Romance"     ,"Sci-Fi","Thriller","War","Western"),as.is = TRUE)
-
-U.Item<-U.Item[,-4]
 
 U.User<-read.csv("http://files.grouplens.org/datasets/movielens/ml-100k/u.user",header=FALSE,sep="|",col.names = c("User_ID","age","gender","occupation","zip code"))
 
@@ -55,12 +29,26 @@ U.Genres<-read.csv("http://files.grouplens.org/datasets/movielens/ml-100k/u.genr
 
 ```
 
-1. U.Item had no data for video release date which had to be removed
+1. Remove Video Release date as it has no data
+
+```{r}
+#Remove "Video Release date" as it has no data
+
+sum(is.na(U.Item[,4]))
+U.Item<-U.Item[,-4]
+
+```
+
 
 
 # Programming Assignments
 
-Note: Assume, Average Rating to be the selection criterion (higher is better).
+Given: Assume, Average Rating to be the selection criterion (higher is better).
+
+Assumptions:
+
+> Ties are broken by counts. 
+> Secondary level ties are ignored and the item which comes first is selected
 
 #### Top 3 movies by Occupation
 
@@ -98,11 +86,6 @@ Top3Occupation<-Top3Occupation[with(Top3Occupation,order(occupation,-mean_rating
 
 
 ```
-
-Assumptions:
-
-1. Ties are broken by counts. 
-2. Secondary level ties are ignored and the item which comes first is selected
 
 #### Top 3 movies by Genre
 
@@ -153,8 +136,8 @@ rownames(Top3Genre)<-NULL
 
 #### Top 3 movies by Occupation,Genre
 
+<span style="color:red">Dataset created in **Top 3 Movies by Genre** is reused</span>
 
-Merging The UGenreUser Data which was calculated as a step for Top3 Movies by Genre with U.User which holds information for User
 
 ```{r}
 # merging data 
@@ -183,7 +166,6 @@ Top3OccupationGenre<-Top3OccupationGenre[with(Top3OccupationGenre,order(occupati
 
 #### Top 3 Movies by Age Group 
 
-Need to Segment Age Groups 
 
 ```{r}
 
@@ -265,28 +247,6 @@ Top3Genre_Summer<-Top3Genre_Summer[with(Top3Genre_Summer,order(-mean_rating,-Cou
 Top3Genre_Summer<-head(Top3Genre_Summer,n = 3) 
 rownames(Top3Genre_Summer)<-NULL
 
-
-# # group by Genre
-# 
-# groupby<-by(Genre_Summer,list(Genre_Summer$genre_transformed,Genre_Summer$movie_id),FUN = function(x) 
-#   {
-#   data.frame(genre_transformed=unique(x$genre_transformed),
-#   Item_ID=unique(x$movie_id),
-#   mean_rating=mean(x$Rating),
-#   Count_Item_ID=nrow(x)
-#   )
-#   })
-# 
-# Top3Genre_Summer<-do.call(rbind,groupby)
-# Top3Genre_Summer<-Top3Genre_Summer[with(Top3Genre_Summer,order(genre_transformed,-mean_rating,-Count_Item_ID)),]
-# 
-# 
-# # pick top 3 
-# 
-# Top3Genre_Summer<-by(Top3Genre_Summer,list(Top3Genre_Summer$genre_transformed),head,n=3) 
-# Top3Genre_Summer<-do.call(rbind.data.frame,Top3Genre_Summer)
-# 
-# rownames(Top3Genre_Summer)<-NULL
 
 ```
 

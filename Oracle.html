@@ -382,38 +382,36 @@ $(document).ready(function () {
 </div>
 
 
-<p>Assume, Average Rating to be the selection criterion (higher is better).</p>
-<p>Find Top 3 movies</p>
-<p>by Occupation</p>
-<p>by Genre</p>
-<p>by Occupation, Genre</p>
-<p>by Age group [ &lt;=6, &lt;=12 &lt;=18, &lt;=30, &lt;=50, 50+]</p>
-<p>Find Top 3 genres released (release date )in Summer [May – July]</p>
-<p>For each genre, find co-occurring (top 2 )genres</p>
-<p>Extra Credit: For each user, find another one with similar preference [same movies, similar ratings]</p>
-<div id="extracting-the-data" class="section level1">
-<h1>Extracting the Data</h1>
+<div id="loading-data" class="section level1">
+<h1>Loading Data</h1>
 <ol style="list-style-type: decimal">
-<li>We will use the links present to extract the data</li>
+<li><a href="files.grouplens.org/datasets/movielens/">Links are used to extract the data</a></li>
 <li>Column Names from the readme file</li>
 </ol>
 <pre class="r"><code>U.Data&lt;-read.csv(&quot;http://files.grouplens.org/datasets/movielens/ml-100k/u.data&quot;,header = FALSE,sep = &quot;\t&quot;,col.names = c(&quot;User_ID&quot;,&quot;Item_ID&quot;,&quot;Rating&quot;,&quot;TimeStamp&quot;))
 
 U.Item&lt;-read.csv(&quot;http://files.grouplens.org/datasets/movielens/ml-100k/u.item&quot;,header=FALSE,sep=&quot;|&quot;,col.names = c(&quot;movie_id&quot;,&quot;movie_title&quot;,&quot;release_date&quot;,&quot;video_release_date&quot;,&quot;IMDb URL&quot;, &quot;unknown&quot;,&quot;Action&quot;,&quot;Adventure&quot;,&quot;Animation&quot;,&quot;Children&#39;s&quot;,&quot;Comedy&quot;,&quot;Crime&quot;,    &quot;Documentary&quot;,&quot;Drama&quot;,&quot;Fantasy&quot;,&quot;Film-Noir&quot;,&quot;Horror&quot;,&quot;Musical&quot;,&quot;Mystery&quot;,&quot;Romance&quot;     ,&quot;Sci-Fi&quot;,&quot;Thriller&quot;,&quot;War&quot;,&quot;Western&quot;),as.is = TRUE)
 
-U.Item&lt;-U.Item[,-4]
-
 U.User&lt;-read.csv(&quot;http://files.grouplens.org/datasets/movielens/ml-100k/u.user&quot;,header=FALSE,sep=&quot;|&quot;,col.names = c(&quot;User_ID&quot;,&quot;age&quot;,&quot;gender&quot;,&quot;occupation&quot;,&quot;zip code&quot;))
 
 
 U.Genres&lt;-read.csv(&quot;http://files.grouplens.org/datasets/movielens/ml-100k/u.genre&quot;,header=FALSE,sep=&quot;|&quot;,col.names = c(&quot;genre&quot;,&quot;Number&quot;))</code></pre>
 <ol style="list-style-type: decimal">
-<li>U.Item had no data for video release date which had to be removed</li>
+<li>Remove Video Release date as it has no data</li>
 </ol>
+<pre class="r"><code>#Remove &quot;Video Release date&quot; as it has no data
+
+sum(is.na(U.Item[,4]))</code></pre>
+<pre><code>## [1] 1682</code></pre>
+<pre class="r"><code>U.Item&lt;-U.Item[,-4]</code></pre>
 </div>
 <div id="programming-assignments" class="section level1">
 <h1>Programming Assignments</h1>
-<p>Note: Assume, Average Rating to be the selection criterion (higher is better).</p>
+<p>Given: Assume, Average Rating to be the selection criterion (higher is better).</p>
+<p>Assumptions:</p>
+<blockquote>
+<p>Ties are broken by counts. Secondary level ties are ignored and the item which comes first is selected</p>
+</blockquote>
 <div id="top-3-movies-by-occupation" class="section level4">
 <h4>Top 3 movies by Occupation</h4>
 <pre class="r"><code>#merge the dataset
@@ -437,12 +435,13 @@ Top3Occupation&lt;-Top3Occupation[with(Top3Occupation,order(occupation,-mean_rat
 # pick top 3 
 
 Top3Occupation&lt;-by(Top3Occupation,list(Top3Occupation$occupation),head,n=3) 
-Top3Occupation&lt;-do.call(rbind.data.frame,Top3Occupation)</code></pre>
-<p>Assumptions:</p>
-<ol style="list-style-type: decimal">
-<li>Ties are broken by counts.</li>
-<li>Secondary level ties are ignored and the item which comes first is selected</li>
-</ol>
+Top3Occupation&lt;-do.call(rbind.data.frame,Top3Occupation)
+rownames(Top3Occupation)&lt;-NULL
+
+# Get the names of the movie
+
+Top3Occupation&lt;-merge(Top3Occupation,U.Item[,1:2],by.x = &quot;Item_ID&quot;,by.y = &quot;movie_id&quot;,sort = FALSE)
+Top3Occupation&lt;-Top3Occupation[with(Top3Occupation,order(occupation,-mean_rating,-Count_Item_ID)),]</code></pre>
 </div>
 <div id="top-3-movies-by-genre" class="section level4">
 <h4>Top 3 movies by Genre</h4>
@@ -462,6 +461,7 @@ groupby&lt;-by(UGenreUser,list(UGenreUser$genre_transformed,UGenreUser$movie_id)
   {
   data.frame(genre_transformed=unique(x$genre_transformed),
   Item_ID=unique(x$movie_id),
+  movie_title=unique(x$movie_title),
   mean_rating=mean(x$Rating),
   Count_Item_ID=nrow(x)
   )
@@ -474,11 +474,12 @@ Top3Genre&lt;-Top3Genre[with(Top3Genre,order(genre_transformed,-mean_rating,-Cou
 # pick top 3 
 
 Top3Genre&lt;-by(Top3Genre,list(Top3Genre$genre_transformed),head,n=3) 
-Top3Genre&lt;-do.call(rbind.data.frame,Top3Genre)</code></pre>
+Top3Genre&lt;-do.call(rbind.data.frame,Top3Genre)
+rownames(Top3Genre)&lt;-NULL</code></pre>
 </div>
 <div id="top-3-movies-by-occupationgenre" class="section level4">
 <h4>Top 3 movies by Occupation,Genre</h4>
-<p>Merging The UGenreUser Data which was calculated as a step for Top3 Movies by Genre with U.User which holds information for User</p>
+<p><span style="color:red">Dataset created in <strong>Top 3 Movies by Genre</strong> is reused</span></p>
 <pre class="r"><code># merging data 
 
 UGenreUser_Occupation&lt;-merge(UGenreUser,U.User,by=&quot;User_ID&quot;)
@@ -499,11 +500,10 @@ Top3OccupationGenre&lt;-do.call(rbind,groupby)
 Top3OccupationGenre&lt;-Top3OccupationGenre[with(Top3OccupationGenre,order(occupation,genre_transformed,-mean_rating,-Count_Item_ID)),]
 
 
-Top3OccupationGenre&lt;-aggregate(Top3OccupationGenre,by=list(Top3OccupationGenre$occupation,Top3OccupationGenre$genre_transformed),FUN=head, n=3)</code></pre>
+Top3OccupationGenre&lt;-Top3OccupationGenre[with(Top3OccupationGenre,order(occupation,genre_transformed,-mean_rating,-Count_Item_ID)),]</code></pre>
 </div>
 <div id="top-3-movies-by-age-group" class="section level4">
 <h4>Top 3 Movies by Age Group</h4>
-<p>Need to Segment Age Groups</p>
 <pre class="r"><code># find the oldest user
 
 max_age=max(U.User$age)
@@ -533,10 +533,16 @@ Top3Age_Group&lt;-do.call(rbind,groupby)
 
 Top3Age_Group&lt;-by(Top3Age_Group,list(Top3Age_Group$age_bracket),head,n=3) 
 Top3Age_Group&lt;-do.call(rbind.data.frame,Top3Age_Group)
-rownames(Top3Age_Group)&lt;-NULL</code></pre>
+rownames(Top3Age_Group)&lt;-NULL
+
+
+# Get the names of the movie
+
+Top3Age_Group&lt;-merge(Top3Age_Group,U.Item[,1:2],by.x = &quot;Item_ID&quot;,by.y = &quot;movie_id&quot;,sort = FALSE)
+Top3Age_Group&lt;-Top3Age_Group[with(Top3Age_Group,order(age_bracket,-mean_rating,-Count_Item_ID)),]</code></pre>
 </div>
-<div id="top-3-movies-by-genre-released-in-summer" class="section level4">
-<h4>Top 3 Movies by Genre released in Summer</h4>
+<div id="top-3-genres-released-in-summer" class="section level4">
+<h4>Top 3 Genres released in Summer</h4>
 <p>Using the release date column to find movies released in Summer</p>
 <pre class="r"><code>#subsetting the data frame by selecting movies released in Summer
 
@@ -550,26 +556,22 @@ Genre_Summer&lt;-Genre_Summer[,c(1:3,25)]
 
 Genre_Summer&lt;-merge(Genre_Summer,U.Data,by.x = &quot;movie_id&quot;,&quot;Item_ID&quot;)
 
-# group by Genre
 
-groupby&lt;-by(Genre_Summer,list(Genre_Summer$genre_transformed,Genre_Summer$movie_id),FUN = function(x) 
+groupby&lt;-by(Genre_Summer,list(Genre_Summer$genre_transformed),FUN = function(x) 
   {
   data.frame(genre_transformed=unique(x$genre_transformed),
-  Item_ID=unique(x$movie_id),
   mean_rating=mean(x$Rating),
   Count_Item_ID=nrow(x)
   )
   })
 
 Top3Genre_Summer&lt;-do.call(rbind,groupby)
-Top3Genre_Summer&lt;-Top3Genre_Summer[with(Top3Genre_Summer,order(genre_transformed,-mean_rating,-Count_Item_ID)),]
+Top3Genre_Summer&lt;-Top3Genre_Summer[with(Top3Genre_Summer,order(-mean_rating,-Count_Item_ID)),]
 
 
 # pick top 3 
 
-Top3Genre_Summer&lt;-by(Top3Genre_Summer,list(Top3Genre_Summer$genre_transformed),head,n=3) 
-Top3Genre_Summer&lt;-do.call(rbind.data.frame,Top3Genre_Summer)
-
+Top3Genre_Summer&lt;-head(Top3Genre_Summer,n = 3) 
 rownames(Top3Genre_Summer)&lt;-NULL</code></pre>
 </div>
 </div>
