@@ -88,6 +88,12 @@ Top3Occupation<-Top3Occupation[with(Top3Occupation,order(occupation,-mean_rating
 
 Top3Occupation<-by(Top3Occupation,list(Top3Occupation$occupation),head,n=3) 
 Top3Occupation<-do.call(rbind.data.frame,Top3Occupation)
+rownames(Top3Occupation)<-NULL
+
+# Get the names of the movie
+
+Top3Occupation<-merge(Top3Occupation,U.Item[,1:2],by.x = "Item_ID",by.y = "movie_id",sort = FALSE)
+Top3Occupation<-Top3Occupation[with(Top3Occupation,order(occupation,-mean_rating,-Count_Item_ID)),]
 
 
 
@@ -126,6 +132,7 @@ groupby<-by(UGenreUser,list(UGenreUser$genre_transformed,UGenreUser$movie_id),FU
   {
   data.frame(genre_transformed=unique(x$genre_transformed),
   Item_ID=unique(x$movie_id),
+  movie_title=unique(x$movie_title),
   mean_rating=mean(x$Rating),
   Count_Item_ID=nrow(x)
   )
@@ -139,7 +146,7 @@ Top3Genre<-Top3Genre[with(Top3Genre,order(genre_transformed,-mean_rating,-Count_
 
 Top3Genre<-by(Top3Genre,list(Top3Genre$genre_transformed),head,n=3) 
 Top3Genre<-do.call(rbind.data.frame,Top3Genre)
-
+rownames(Top3Genre)<-NULL
 
 ```
 
@@ -170,8 +177,7 @@ Top3OccupationGenre<-do.call(rbind,groupby)
 Top3OccupationGenre<-Top3OccupationGenre[with(Top3OccupationGenre,order(occupation,genre_transformed,-mean_rating,-Count_Item_ID)),]
 
 
-Top3OccupationGenre<-aggregate(Top3OccupationGenre,by=list(Top3OccupationGenre$occupation,Top3OccupationGenre$genre_transformed),FUN=head, n=3)
-
+Top3OccupationGenre<-Top3OccupationGenre[with(Top3OccupationGenre,order(occupation,genre_transformed,-mean_rating,-Count_Item_ID)),]
 
 ```
 
@@ -212,6 +218,13 @@ Top3Age_Group<-by(Top3Age_Group,list(Top3Age_Group$age_bracket),head,n=3)
 Top3Age_Group<-do.call(rbind.data.frame,Top3Age_Group)
 rownames(Top3Age_Group)<-NULL
 
+
+# Get the names of the movie
+
+Top3Age_Group<-merge(Top3Age_Group,U.Item[,1:2],by.x = "Item_ID",by.y = "movie_id",sort = FALSE)
+Top3Age_Group<-Top3Age_Group[with(Top3Age_Group,order(age_bracket,-mean_rating,-Count_Item_ID)),]
+
+
 ```
 
 
@@ -234,33 +247,7 @@ Genre_Summer<-Genre_Summer[,c(1:3,25)]
 
 Genre_Summer<-merge(Genre_Summer,U.Data,by.x = "movie_id","Item_ID")
 
-# group by Genre
 
-groupby<-by(Genre_Summer,list(Genre_Summer$genre_transformed,Genre_Summer$movie_id),FUN = function(x) 
-  {
-  data.frame(genre_transformed=unique(x$genre_transformed),
-  Item_ID=unique(x$movie_id),
-  mean_rating=mean(x$Rating),
-  Count_Item_ID=nrow(x)
-  )
-  })
-
-Top3Genre_Summer<-do.call(rbind,groupby)
-Top3Genre_Summer<-Top3Genre_Summer[with(Top3Genre_Summer,order(genre_transformed,-mean_rating,-Count_Item_ID)),]
-
-
-# pick top 3 
-
-Top3Genre_Summer<-by(Top3Genre_Summer,list(Top3Genre_Summer$genre_transformed),head,n=3) 
-Top3Genre_Summer<-do.call(rbind.data.frame,Top3Genre_Summer)
-
-rownames(Top3Genre_Summer)<-NULL
-
-```
-
-
-
-```{r}
 groupby<-by(Genre_Summer,list(Genre_Summer$genre_transformed),FUN = function(x) 
   {
   data.frame(genre_transformed=unique(x$genre_transformed),
@@ -277,6 +264,36 @@ Top3Genre_Summer<-Top3Genre_Summer[with(Top3Genre_Summer,order(-mean_rating,-Cou
 
 Top3Genre_Summer<-head(Top3Genre_Summer,n = 3) 
 rownames(Top3Genre_Summer)<-NULL
+
+
+# # group by Genre
+# 
+# groupby<-by(Genre_Summer,list(Genre_Summer$genre_transformed,Genre_Summer$movie_id),FUN = function(x) 
+#   {
+#   data.frame(genre_transformed=unique(x$genre_transformed),
+#   Item_ID=unique(x$movie_id),
+#   mean_rating=mean(x$Rating),
+#   Count_Item_ID=nrow(x)
+#   )
+#   })
+# 
+# Top3Genre_Summer<-do.call(rbind,groupby)
+# Top3Genre_Summer<-Top3Genre_Summer[with(Top3Genre_Summer,order(genre_transformed,-mean_rating,-Count_Item_ID)),]
+# 
+# 
+# # pick top 3 
+# 
+# Top3Genre_Summer<-by(Top3Genre_Summer,list(Top3Genre_Summer$genre_transformed),head,n=3) 
+# Top3Genre_Summer<-do.call(rbind.data.frame,Top3Genre_Summer)
+# 
+# rownames(Top3Genre_Summer)<-NULL
+
+```
+
+
+
+```{r}
+
 ```
 
 
