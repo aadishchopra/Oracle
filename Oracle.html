@@ -11,7 +11,7 @@
 
 <meta name="author" content="Aadish Chopra" />
 
-<meta name="date" content="2019-10-18" />
+<meta name="date" content="2019-10-20" />
 
 <title>Oracle</title>
 
@@ -377,7 +377,7 @@ $(document).ready(function () {
 
 <h1 class="title toc-ignore">Oracle</h1>
 <h4 class="author">Aadish Chopra</h4>
-<h4 class="date">10/18/2019</h4>
+<h4 class="date">10/20/2019</h4>
 
 </div>
 
@@ -401,16 +401,19 @@ U.Genres&lt;-read.csv(&quot;http://files.grouplens.org/datasets/movielens/ml-100
 </ol>
 <pre class="r"><code>#Remove &quot;Video Release date&quot; as it has no data
 
-sum(is.na(U.Item[,4]))</code></pre>
-<pre><code>## [1] 1682</code></pre>
-<pre class="r"><code>U.Item&lt;-U.Item[,-4]</code></pre>
+#sum(is.na(U.Item[,4]))
+U.Item&lt;-U.Item[,-4]</code></pre>
+<p>Number of missing values in video_release_date is</p>
 </div>
 <div id="programming-assignments" class="section level1">
 <h1>Programming Assignments</h1>
 <p>Given: Assume, Average Rating to be the selection criterion (higher is better).</p>
 <p>Assumptions:</p>
 <blockquote>
-<p>Ties are broken by counts. Secondary level ties are ignored and the item which comes first is selected</p>
+<p>Ties are broken by counts.</p>
+</blockquote>
+<blockquote>
+<p>Secondary level ties are ignored and the item which comes first is selected</p>
 </blockquote>
 <div id="top-3-movies-by-occupation" class="section level4">
 <h4>Top 3 movies by Occupation</h4>
@@ -441,7 +444,528 @@ rownames(Top3Occupation)&lt;-NULL
 # Get the names of the movie
 
 Top3Occupation&lt;-merge(Top3Occupation,U.Item[,1:2],by.x = &quot;Item_ID&quot;,by.y = &quot;movie_id&quot;,sort = FALSE)
-Top3Occupation&lt;-Top3Occupation[with(Top3Occupation,order(occupation,-mean_rating,-Count_Item_ID)),]</code></pre>
+Top3Occupation&lt;-Top3Occupation[with(Top3Occupation,order(occupation,-mean_rating,-Count_Item_ID)),]
+
+knitr::kable(Top3Occupation,caption = &quot;Top 3 Movies by Occupation&quot;)</code></pre>
+<table>
+<caption>Top 3 Movies by Occupation</caption>
+<thead>
+<tr class="header">
+<th></th>
+<th align="right">Item_ID</th>
+<th align="left">occupation</th>
+<th align="right">mean_rating</th>
+<th align="right">Count_Item_ID</th>
+<th align="left">movie_title</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td align="right">408</td>
+<td align="left">administrator</td>
+<td align="right">5</td>
+<td align="right">5</td>
+<td align="left">Close Shave, A (1995)</td>
+</tr>
+<tr class="even">
+<td>3</td>
+<td align="right">251</td>
+<td align="left">administrator</td>
+<td align="right">5</td>
+<td align="right">3</td>
+<td align="left">Shall We Dance? (1996)</td>
+</tr>
+<tr class="odd">
+<td>4</td>
+<td align="right">359</td>
+<td align="left">administrator</td>
+<td align="right">5</td>
+<td align="right">2</td>
+<td align="left">Assignment, The (1997)</td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td align="right">408</td>
+<td align="left">artist</td>
+<td align="right">5</td>
+<td align="right">4</td>
+<td align="left">Close Shave, A (1995)</td>
+</tr>
+<tr class="odd">
+<td>6</td>
+<td align="right">169</td>
+<td align="left">artist</td>
+<td align="right">5</td>
+<td align="right">3</td>
+<td align="left">Wrong Trousers, The (1993)</td>
+</tr>
+<tr class="even">
+<td>9</td>
+<td align="right">505</td>
+<td align="left">artist</td>
+<td align="right">5</td>
+<td align="right">3</td>
+<td align="left">Dial M for Murder (1954)</td>
+</tr>
+<tr class="odd">
+<td>10</td>
+<td align="right">474</td>
+<td align="left">doctor</td>
+<td align="right">5</td>
+<td align="right">2</td>
+<td align="left">Dr. Strangelove or: How I Learned to Stop Worrying and Love the Bomb (1963)</td>
+</tr>
+<tr class="even">
+<td>11</td>
+<td align="right">483</td>
+<td align="left">doctor</td>
+<td align="right">5</td>
+<td align="right">2</td>
+<td align="left">Casablanca (1942)</td>
+</tr>
+<tr class="odd">
+<td>12</td>
+<td align="right">514</td>
+<td align="left">doctor</td>
+<td align="right">5</td>
+<td align="right">2</td>
+<td align="left">Annie Hall (1977)</td>
+</tr>
+<tr class="even">
+<td>13</td>
+<td align="right">963</td>
+<td align="left">educator</td>
+<td align="right">5</td>
+<td align="right">3</td>
+<td align="left">Some Folks Call It a Sling Blade (1993)</td>
+</tr>
+<tr class="odd">
+<td>14</td>
+<td align="right">464</td>
+<td align="left">educator</td>
+<td align="right">5</td>
+<td align="right">2</td>
+<td align="left">Vanya on 42nd Street (1994)</td>
+</tr>
+<tr class="even">
+<td>15</td>
+<td align="right">953</td>
+<td align="left">educator</td>
+<td align="right">5</td>
+<td align="right">2</td>
+<td align="left">Unstrung Heroes (1995)</td>
+</tr>
+<tr class="odd">
+<td>16</td>
+<td align="right">611</td>
+<td align="left">engineer</td>
+<td align="right">5</td>
+<td align="right">2</td>
+<td align="left">Laura (1944)</td>
+</tr>
+<tr class="even">
+<td>17</td>
+<td align="right">1063</td>
+<td align="left">engineer</td>
+<td align="right">5</td>
+<td align="right">2</td>
+<td align="left">Little Princess, A (1995)</td>
+</tr>
+<tr class="odd">
+<td>18</td>
+<td align="right">834</td>
+<td align="left">engineer</td>
+<td align="right">5</td>
+<td align="right">1</td>
+<td align="left">Halloween: The Curse of Michael Myers (1995)</td>
+</tr>
+<tr class="even">
+<td>19</td>
+<td align="right">179</td>
+<td align="left">entertainment</td>
+<td align="right">5</td>
+<td align="right">4</td>
+<td align="left">Clockwork Orange, A (1971)</td>
+</tr>
+<tr class="odd">
+<td>20</td>
+<td align="right">99</td>
+<td align="left">entertainment</td>
+<td align="right">5</td>
+<td align="right">2</td>
+<td align="left">Snow White and the Seven Dwarfs (1937)</td>
+</tr>
+<tr class="even">
+<td>21</td>
+<td align="right">150</td>
+<td align="left">entertainment</td>
+<td align="right">5</td>
+<td align="right">2</td>
+<td align="left">Swingers (1996)</td>
+</tr>
+<tr class="odd">
+<td>22</td>
+<td align="right">603</td>
+<td align="left">executive</td>
+<td align="right">5</td>
+<td align="right">4</td>
+<td align="left">Rear Window (1954)</td>
+</tr>
+<tr class="even">
+<td>24</td>
+<td align="right">316</td>
+<td align="left">executive</td>
+<td align="right">5</td>
+<td align="right">2</td>
+<td align="left">As Good As It Gets (1997)</td>
+</tr>
+<tr class="odd">
+<td>25</td>
+<td align="right">490</td>
+<td align="left">executive</td>
+<td align="right">5</td>
+<td align="right">2</td>
+<td align="left">To Catch a Thief (1955)</td>
+</tr>
+<tr class="even">
+<td>26</td>
+<td align="right">67</td>
+<td align="left">healthcare</td>
+<td align="right">5</td>
+<td align="right">1</td>
+<td align="left">Ace Ventura: Pet Detective (1994)</td>
+</tr>
+<tr class="odd">
+<td>27</td>
+<td align="right">148</td>
+<td align="left">healthcare</td>
+<td align="right">5</td>
+<td align="right">1</td>
+<td align="left">Ghost and the Darkness, The (1996)</td>
+</tr>
+<tr class="even">
+<td>30</td>
+<td align="right">320</td>
+<td align="left">healthcare</td>
+<td align="right">5</td>
+<td align="right">1</td>
+<td align="left">Paradise Lost: The Child Murders at Robin Hood Hills (1996)</td>
+</tr>
+<tr class="odd">
+<td>31</td>
+<td align="right">319</td>
+<td align="left">homemaker</td>
+<td align="right">5</td>
+<td align="right">2</td>
+<td align="left">Everyone Says I Love You (1996)</td>
+</tr>
+<tr class="even">
+<td>32</td>
+<td align="right">845</td>
+<td align="left">homemaker</td>
+<td align="right">5</td>
+<td align="right">2</td>
+<td align="left">That Thing You Do! (1996)</td>
+</tr>
+<tr class="odd">
+<td>33</td>
+<td align="right">22</td>
+<td align="left">homemaker</td>
+<td align="right">5</td>
+<td align="right">1</td>
+<td align="left">Braveheart (1995)</td>
+</tr>
+<tr class="even">
+<td>34</td>
+<td align="right">205</td>
+<td align="left">lawyer</td>
+<td align="right">5</td>
+<td align="right">4</td>
+<td align="left">Patton (1970)</td>
+</tr>
+<tr class="odd">
+<td>35</td>
+<td align="right">488</td>
+<td align="left">lawyer</td>
+<td align="right">5</td>
+<td align="right">4</td>
+<td align="left">Sunset Blvd. (1950)</td>
+</tr>
+<tr class="even">
+<td>36</td>
+<td align="right">12</td>
+<td align="left">lawyer</td>
+<td align="right">5</td>
+<td align="right">3</td>
+<td align="left">Usual Suspects, The (1995)</td>
+</tr>
+<tr class="odd">
+<td>37</td>
+<td align="right">533</td>
+<td align="left">librarian</td>
+<td align="right">5</td>
+<td align="right">2</td>
+<td align="left">Daytrippers, The (1996)</td>
+</tr>
+<tr class="even">
+<td>38</td>
+<td align="right">656</td>
+<td align="left">librarian</td>
+<td align="right">5</td>
+<td align="right">2</td>
+<td align="left">M (1931)</td>
+</tr>
+<tr class="odd">
+<td>39</td>
+<td align="right">1099</td>
+<td align="left">librarian</td>
+<td align="right">5</td>
+<td align="right">2</td>
+<td align="left">Red Firecracker, Green Firecracker (1994)</td>
+</tr>
+<tr class="even">
+<td>40</td>
+<td align="right">496</td>
+<td align="left">marketing</td>
+<td align="right">5</td>
+<td align="right">3</td>
+<td align="left">It’s a Wonderful Life (1946)</td>
+</tr>
+<tr class="odd">
+<td>23</td>
+<td align="right">316</td>
+<td align="left">marketing</td>
+<td align="right">5</td>
+<td align="right">2</td>
+<td align="left">As Good As It Gets (1997)</td>
+</tr>
+<tr class="even">
+<td>41</td>
+<td align="right">275</td>
+<td align="left">marketing</td>
+<td align="right">5</td>
+<td align="right">2</td>
+<td align="left">Sense and Sensibility (1995)</td>
+</tr>
+<tr class="odd">
+<td>42</td>
+<td align="right">64</td>
+<td align="left">none</td>
+<td align="right">5</td>
+<td align="right">3</td>
+<td align="left">Shawshank Redemption, The (1994)</td>
+</tr>
+<tr class="even">
+<td>43</td>
+<td align="right">333</td>
+<td align="left">none</td>
+<td align="right">5</td>
+<td align="right">3</td>
+<td align="left">Game, The (1997)</td>
+</tr>
+<tr class="odd">
+<td>44</td>
+<td align="right">54</td>
+<td align="left">none</td>
+<td align="right">5</td>
+<td align="right">2</td>
+<td align="left">Outbreak (1995)</td>
+</tr>
+<tr class="even">
+<td>45</td>
+<td align="right">547</td>
+<td align="left">other</td>
+<td align="right">5</td>
+<td align="right">2</td>
+<td align="left">Young Poisoner’s Handbook, The (1995)</td>
+</tr>
+<tr class="odd">
+<td>46</td>
+<td align="right">601</td>
+<td align="left">other</td>
+<td align="right">5</td>
+<td align="right">2</td>
+<td align="left">For Whom the Bell Tolls (1943)</td>
+</tr>
+<tr class="even">
+<td>47</td>
+<td align="right">644</td>
+<td align="left">other</td>
+<td align="right">5</td>
+<td align="right">2</td>
+<td align="left">Thin Blue Line, The (1988)</td>
+</tr>
+<tr class="odd">
+<td>48</td>
+<td align="right">114</td>
+<td align="left">programmer</td>
+<td align="right">5</td>
+<td align="right">6</td>
+<td align="left">Wallace &amp; Gromit: The Best of Aardman Animation (1996)</td>
+</tr>
+<tr class="even">
+<td>29</td>
+<td align="right">320</td>
+<td align="left">programmer</td>
+<td align="right">5</td>
+<td align="right">1</td>
+<td align="left">Paradise Lost: The Child Murders at Robin Hood Hills (1996)</td>
+</tr>
+<tr class="odd">
+<td>49</td>
+<td align="right">416</td>
+<td align="left">programmer</td>
+<td align="right">5</td>
+<td align="right">1</td>
+<td align="left">Old Yeller (1957)</td>
+</tr>
+<tr class="even">
+<td>50</td>
+<td align="right">498</td>
+<td align="left">retired</td>
+<td align="right">5</td>
+<td align="right">3</td>
+<td align="left">African Queen, The (1951)</td>
+</tr>
+<tr class="odd">
+<td>8</td>
+<td align="right">169</td>
+<td align="left">retired</td>
+<td align="right">5</td>
+<td align="right">2</td>
+<td align="left">Wrong Trousers, The (1993)</td>
+</tr>
+<tr class="even">
+<td>51</td>
+<td align="right">306</td>
+<td align="left">retired</td>
+<td align="right">5</td>
+<td align="right">2</td>
+<td align="left">Mrs. Brown (Her Majesty, Mrs. Brown) (1997)</td>
+</tr>
+<tr class="odd">
+<td>52</td>
+<td align="right">173</td>
+<td align="left">salesman</td>
+<td align="right">5</td>
+<td align="right">3</td>
+<td align="left">Princess Bride, The (1987)</td>
+</tr>
+<tr class="even">
+<td>53</td>
+<td align="right">340</td>
+<td align="left">salesman</td>
+<td align="right">5</td>
+<td align="right">3</td>
+<td align="left">Boogie Nights (1997)</td>
+</tr>
+<tr class="odd">
+<td>54</td>
+<td align="right">346</td>
+<td align="left">salesman</td>
+<td align="right">5</td>
+<td align="right">3</td>
+<td align="left">Jackie Brown (1997)</td>
+</tr>
+<tr class="even">
+<td>55</td>
+<td align="right">19</td>
+<td align="left">scientist</td>
+<td align="right">5</td>
+<td align="right">2</td>
+<td align="left">Antonia’s Line (1995)</td>
+</tr>
+<tr class="odd">
+<td>56</td>
+<td align="right">81</td>
+<td align="left">scientist</td>
+<td align="right">5</td>
+<td align="right">2</td>
+<td align="left">Hudsucker Proxy, The (1994)</td>
+</tr>
+<tr class="even">
+<td>57</td>
+<td align="right">156</td>
+<td align="left">scientist</td>
+<td align="right">5</td>
+<td align="right">2</td>
+<td align="left">Reservoir Dogs (1992)</td>
+</tr>
+<tr class="odd">
+<td>28</td>
+<td align="right">320</td>
+<td align="left">student</td>
+<td align="right">5</td>
+<td align="right">4</td>
+<td align="left">Paradise Lost: The Child Murders at Robin Hood Hills (1996)</td>
+</tr>
+<tr class="even">
+<td>58</td>
+<td align="right">279</td>
+<td align="left">student</td>
+<td align="right">5</td>
+<td align="right">2</td>
+<td align="left">Once Upon a Time… When We Were Colored (1995)</td>
+</tr>
+<tr class="odd">
+<td>59</td>
+<td align="right">614</td>
+<td align="left">student</td>
+<td align="right">5</td>
+<td align="right">2</td>
+<td align="left">Giant (1956)</td>
+</tr>
+<tr class="even">
+<td>7</td>
+<td align="right">169</td>
+<td align="left">technician</td>
+<td align="right">5</td>
+<td align="right">5</td>
+<td align="left">Wrong Trousers, The (1993)</td>
+</tr>
+<tr class="odd">
+<td>60</td>
+<td align="right">14</td>
+<td align="left">technician</td>
+<td align="right">5</td>
+<td align="right">3</td>
+<td align="left">Postino, Il (1994)</td>
+</tr>
+<tr class="even">
+<td>5</td>
+<td align="right">359</td>
+<td align="left">technician</td>
+<td align="right">5</td>
+<td align="right">2</td>
+<td align="left">Assignment, The (1997)</td>
+</tr>
+<tr class="odd">
+<td>61</td>
+<td align="right">650</td>
+<td align="left">writer</td>
+<td align="right">5</td>
+<td align="right">3</td>
+<td align="left">Seventh Seal, The (Sjunde inseglet, Det) (1957)</td>
+</tr>
+<tr class="even">
+<td>62</td>
+<td align="right">652</td>
+<td align="left">writer</td>
+<td align="right">5</td>
+<td align="right">2</td>
+<td align="left">Rosencrantz and Guildenstern Are Dead (1990)</td>
+</tr>
+<tr class="odd">
+<td>63</td>
+<td align="right">18</td>
+<td align="left">writer</td>
+<td align="right">5</td>
+<td align="right">1</td>
+<td align="left">White Balloon, The (1995)</td>
+</tr>
+</tbody>
+</table>
 </div>
 <div id="top-3-movies-by-genre" class="section level4">
 <h4>Top 3 movies by Genre</h4>
@@ -475,7 +999,415 @@ Top3Genre&lt;-Top3Genre[with(Top3Genre,order(genre_transformed,-mean_rating,-Cou
 
 Top3Genre&lt;-by(Top3Genre,list(Top3Genre$genre_transformed),head,n=3) 
 Top3Genre&lt;-do.call(rbind.data.frame,Top3Genre)
-rownames(Top3Genre)&lt;-NULL</code></pre>
+rownames(Top3Genre)&lt;-NULL
+
+knitr::kable(Top3Genre,caption = &quot;Top 3 Movies by Genre&quot;)</code></pre>
+<table>
+<caption>Top 3 Movies by Genre</caption>
+<thead>
+<tr class="header">
+<th align="left">genre_transformed</th>
+<th align="right">Item_ID</th>
+<th align="left">movie_title</th>
+<th align="right">mean_rating</th>
+<th align="right">Count_Item_ID</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Horror</td>
+<td align="right">318</td>
+<td align="left">Schindler’s List (1993)</td>
+<td align="right">4.466443</td>
+<td align="right">298</td>
+</tr>
+<tr class="even">
+<td align="left">Horror</td>
+<td align="right">114</td>
+<td align="left">Wallace &amp; Gromit: The Best of Aardman Animation (1996)</td>
+<td align="right">4.447761</td>
+<td align="right">67</td>
+</tr>
+<tr class="odd">
+<td align="left">Horror</td>
+<td align="right">285</td>
+<td align="left">Secrets &amp; Lies (1996)</td>
+<td align="right">4.265432</td>
+<td align="right">162</td>
+</tr>
+<tr class="even">
+<td align="left">Romance</td>
+<td align="right">1122</td>
+<td align="left">They Made Me a Criminal (1939)</td>
+<td align="right">5.000000</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="left">Romance</td>
+<td align="right">169</td>
+<td align="left">Wrong Trousers, The (1993)</td>
+<td align="right">4.466102</td>
+<td align="right">118</td>
+</tr>
+<tr class="even">
+<td align="left">Romance</td>
+<td align="right">513</td>
+<td align="left">Third Man, The (1949)</td>
+<td align="right">4.333333</td>
+<td align="right">72</td>
+</tr>
+<tr class="odd">
+<td align="left">Sci.Fi</td>
+<td align="right">127</td>
+<td align="left">Godfather, The (1972)</td>
+<td align="right">4.283293</td>
+<td align="right">413</td>
+</tr>
+<tr class="even">
+<td align="left">Sci.Fi</td>
+<td align="right">493</td>
+<td align="left">Thin Man, The (1934)</td>
+<td align="right">4.150000</td>
+<td align="right">60</td>
+</tr>
+<tr class="odd">
+<td align="left">Sci.Fi</td>
+<td align="right">83</td>
+<td align="left">Much Ado About Nothing (1993)</td>
+<td align="right">4.062500</td>
+<td align="right">176</td>
+</tr>
+<tr class="even">
+<td align="left">Comedy</td>
+<td align="right">1189</td>
+<td align="left">Prefontaine (1997)</td>
+<td align="right">5.000000</td>
+<td align="right">3</td>
+</tr>
+<tr class="odd">
+<td align="left">Comedy</td>
+<td align="right">1599</td>
+<td align="left">Someone Else’s America (1995)</td>
+<td align="right">5.000000</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">Comedy</td>
+<td align="right">1653</td>
+<td align="left">Entertaining Angels: The Dorothy Day Story (1996)</td>
+<td align="right">5.000000</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="left">Documentary</td>
+<td align="right">113</td>
+<td align="left">Horseman on the Roof, The (Hussard sur le toit, Le) (1995)</td>
+<td align="right">4.111111</td>
+<td align="right">9</td>
+</tr>
+<tr class="even">
+<td align="left">Documentary</td>
+<td align="right">165</td>
+<td align="left">Jean de Florette (1986)</td>
+<td align="right">4.109375</td>
+<td align="right">64</td>
+</tr>
+<tr class="odd">
+<td align="left">Documentary</td>
+<td align="right">490</td>
+<td align="left">To Catch a Thief (1955)</td>
+<td align="right">4.020000</td>
+<td align="right">50</td>
+</tr>
+<tr class="even">
+<td align="left">Drama</td>
+<td align="right">1293</td>
+<td align="left">Star Kid (1997)</td>
+<td align="right">5.000000</td>
+<td align="right">3</td>
+</tr>
+<tr class="odd">
+<td align="left">Drama</td>
+<td align="right">814</td>
+<td align="left">Great Day in Harlem, A (1994)</td>
+<td align="right">5.000000</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">Drama</td>
+<td align="right">1642</td>
+<td align="left">Some Mother’s Son (1996)</td>
+<td align="right">4.500000</td>
+<td align="right">2</td>
+</tr>
+<tr class="odd">
+<td align="left">Action</td>
+<td align="right">1293</td>
+<td align="left">Star Kid (1997)</td>
+<td align="right">5.000000</td>
+<td align="right">3</td>
+</tr>
+<tr class="even">
+<td align="left">Action</td>
+<td align="right">1500</td>
+<td align="left">Santa with Muscles (1996)</td>
+<td align="right">5.000000</td>
+<td align="right">2</td>
+</tr>
+<tr class="odd">
+<td align="left">Action</td>
+<td align="right">119</td>
+<td align="left">Maya Lin: A Strong Clear Vision (1994)</td>
+<td align="right">4.500000</td>
+<td align="right">4</td>
+</tr>
+<tr class="even">
+<td align="left">Thriller</td>
+<td align="right">1201</td>
+<td align="left">Marlene Dietrich: Shadow and Light (1996)</td>
+<td align="right">5.000000</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="left">Thriller</td>
+<td align="right">1398</td>
+<td align="left">Anna (1996)</td>
+<td align="right">4.500000</td>
+<td align="right">2</td>
+</tr>
+<tr class="even">
+<td align="left">Thriller</td>
+<td align="right">408</td>
+<td align="left">Close Shave, A (1995)</td>
+<td align="right">4.491071</td>
+<td align="right">112</td>
+</tr>
+<tr class="odd">
+<td align="left">Crime</td>
+<td align="right">1293</td>
+<td align="left">Star Kid (1997)</td>
+<td align="right">5.000000</td>
+<td align="right">3</td>
+</tr>
+<tr class="even">
+<td align="left">Crime</td>
+<td align="right">98</td>
+<td align="left">Silence of the Lambs, The (1991)</td>
+<td align="right">4.289744</td>
+<td align="right">390</td>
+</tr>
+<tr class="odd">
+<td align="left">Crime</td>
+<td align="right">172</td>
+<td align="left">Empire Strikes Back, The (1980)</td>
+<td align="right">4.204360</td>
+<td align="right">367</td>
+</tr>
+<tr class="even">
+<td align="left">Musical</td>
+<td align="right">173</td>
+<td align="left">Princess Bride, The (1987)</td>
+<td align="right">4.172840</td>
+<td align="right">324</td>
+</tr>
+<tr class="odd">
+<td align="left">Musical</td>
+<td align="right">302</td>
+<td align="left">L.A. Confidential (1997)</td>
+<td align="right">4.161616</td>
+<td align="right">297</td>
+</tr>
+<tr class="even">
+<td align="left">Musical</td>
+<td align="right">659</td>
+<td align="left">Arsenic and Old Lace (1944)</td>
+<td align="right">4.078261</td>
+<td align="right">115</td>
+</tr>
+<tr class="odd">
+<td align="left">Adventure</td>
+<td align="right">1293</td>
+<td align="left">Star Kid (1997)</td>
+<td align="right">5.000000</td>
+<td align="right">3</td>
+</tr>
+<tr class="even">
+<td align="left">Adventure</td>
+<td align="right">963</td>
+<td align="left">Some Folks Call It a Sling Blade (1993)</td>
+<td align="right">4.292683</td>
+<td align="right">41</td>
+</tr>
+<tr class="odd">
+<td align="left">Adventure</td>
+<td align="right">313</td>
+<td align="left">Titanic (1997)</td>
+<td align="right">4.245714</td>
+<td align="right">350</td>
+</tr>
+<tr class="even">
+<td align="left">Mystery</td>
+<td align="right">484</td>
+<td align="left">Maltese Falcon, The (1941)</td>
+<td align="right">4.210145</td>
+<td align="right">138</td>
+</tr>
+<tr class="odd">
+<td align="left">Mystery</td>
+<td align="right">923</td>
+<td align="left">Raise the Red Lantern (1991)</td>
+<td align="right">4.155172</td>
+<td align="right">58</td>
+</tr>
+<tr class="even">
+<td align="left">Mystery</td>
+<td align="right">23</td>
+<td align="left">Taxi Driver (1976)</td>
+<td align="right">4.120879</td>
+<td align="right">182</td>
+</tr>
+<tr class="odd">
+<td align="left">War</td>
+<td align="right">1536</td>
+<td align="left">Aiqing wansui (1994)</td>
+<td align="right">5.000000</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">War</td>
+<td align="right">1594</td>
+<td align="left">Everest (1998)</td>
+<td align="right">4.500000</td>
+<td align="right">2</td>
+</tr>
+<tr class="odd">
+<td align="left">War</td>
+<td align="right">50</td>
+<td align="left">Star Wars (1977)</td>
+<td align="right">4.358491</td>
+<td align="right">583</td>
+</tr>
+<tr class="even">
+<td align="left">Film.Noir</td>
+<td align="right">22</td>
+<td align="left">Braveheart (1995)</td>
+<td align="right">4.151515</td>
+<td align="right">297</td>
+</tr>
+<tr class="odd">
+<td align="left">Film.Noir</td>
+<td align="right">205</td>
+<td align="left">Patton (1970)</td>
+<td align="right">3.992647</td>
+<td align="right">136</td>
+</tr>
+<tr class="even">
+<td align="left">Film.Noir</td>
+<td align="right">297</td>
+<td align="left">Ulee’s Gold (1997)</td>
+<td align="right">3.960000</td>
+<td align="right">50</td>
+</tr>
+<tr class="odd">
+<td align="left">Children.s</td>
+<td align="right">1467</td>
+<td align="left">Saint of Fort Washington, The (1993)</td>
+<td align="right">5.000000</td>
+<td align="right">2</td>
+</tr>
+<tr class="even">
+<td align="left">Children.s</td>
+<td align="right">1122</td>
+<td align="left">They Made Me a Criminal (1939)</td>
+<td align="right">5.000000</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="left">Children.s</td>
+<td align="right">1449</td>
+<td align="left">Pather Panchali (1955)</td>
+<td align="right">4.625000</td>
+<td align="right">8</td>
+</tr>
+<tr class="even">
+<td align="left">Western</td>
+<td align="right">166</td>
+<td align="left">Manon of the Spring (Manon des sources) (1986)</td>
+<td align="right">4.120690</td>
+<td align="right">58</td>
+</tr>
+<tr class="odd">
+<td align="left">Western</td>
+<td align="right">1505</td>
+<td align="left">Killer: A Journal of Murder (1995)</td>
+<td align="right">4.000000</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">Western</td>
+<td align="right">607</td>
+<td align="left">Rebecca (1940)</td>
+<td align="right">3.969697</td>
+<td align="right">66</td>
+</tr>
+<tr class="odd">
+<td align="left">Animation</td>
+<td align="right">89</td>
+<td align="left">Blade Runner (1982)</td>
+<td align="right">4.138182</td>
+<td align="right">275</td>
+</tr>
+<tr class="even">
+<td align="left">Animation</td>
+<td align="right">56</td>
+<td align="left">Pulp Fiction (1994)</td>
+<td align="right">4.060914</td>
+<td align="right">394</td>
+</tr>
+<tr class="odd">
+<td align="left">Animation</td>
+<td align="right">59</td>
+<td align="left">Three Colors: Red (1994)</td>
+<td align="right">4.060241</td>
+<td align="right">83</td>
+</tr>
+<tr class="even">
+<td align="left">unknown</td>
+<td align="right">152</td>
+<td align="left">Sleeper (1973)</td>
+<td align="right">3.634146</td>
+<td align="right">82</td>
+</tr>
+<tr class="odd">
+<td align="left">unknown</td>
+<td align="right">72</td>
+<td align="left">Mask, The (1994)</td>
+<td align="right">3.193798</td>
+<td align="right">129</td>
+</tr>
+<tr class="even">
+<td align="left">Fantasy</td>
+<td align="right">921</td>
+<td align="left">Farewell My Concubine (1993)</td>
+<td align="right">3.978261</td>
+<td align="right">46</td>
+</tr>
+<tr class="odd">
+<td align="left">Fantasy</td>
+<td align="right">945</td>
+<td align="left">Charade (1963)</td>
+<td align="right">3.925000</td>
+<td align="right">40</td>
+</tr>
+<tr class="even">
+<td align="left">Fantasy</td>
+<td align="right">1062</td>
+<td align="left">Four Days in September (1997)</td>
+<td align="right">3.750000</td>
+<td align="right">12</td>
+</tr>
+</tbody>
+</table>
 </div>
 <div id="top-3-movies-by-occupationgenre" class="section level4">
 <h4>Top 3 movies by Occupation,Genre</h4>
@@ -539,7 +1471,129 @@ rownames(Top3Age_Group)&lt;-NULL
 # Get the names of the movie
 
 Top3Age_Group&lt;-merge(Top3Age_Group,U.Item[,1:2],by.x = &quot;Item_ID&quot;,by.y = &quot;movie_id&quot;,sort = FALSE)
-Top3Age_Group&lt;-Top3Age_Group[with(Top3Age_Group,order(age_bracket,-mean_rating,-Count_Item_ID)),]</code></pre>
+Top3Age_Group&lt;-Top3Age_Group[with(Top3Age_Group,order(age_bracket,-mean_rating,-Count_Item_ID)),]
+
+
+knitr::kable(Top3Age_Group,caption = &quot;Top 3 Movies by Age group&quot;)</code></pre>
+<table>
+<caption>Top 3 Movies by Age group</caption>
+<thead>
+<tr class="header">
+<th align="right">Item_ID</th>
+<th align="left">age_bracket</th>
+<th align="right">mean_rating</th>
+<th align="right">Count_Item_ID</th>
+<th align="left">movie_title</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">8</td>
+<td align="left">6-12</td>
+<td align="right">5</td>
+<td align="right">1</td>
+<td align="left">Babe (1995)</td>
+</tr>
+<tr class="even">
+<td align="right">69</td>
+<td align="left">6-12</td>
+<td align="right">5</td>
+<td align="right">1</td>
+<td align="left">Forrest Gump (1994)</td>
+</tr>
+<tr class="odd">
+<td align="right">94</td>
+<td align="left">6-12</td>
+<td align="right">5</td>
+<td align="right">1</td>
+<td align="left">Home Alone (1990)</td>
+</tr>
+<tr class="even">
+<td align="right">316</td>
+<td align="left">12-18</td>
+<td align="right">5</td>
+<td align="right">5</td>
+<td align="left">As Good As It Gets (1997)</td>
+</tr>
+<tr class="odd">
+<td align="right">134</td>
+<td align="left">12-18</td>
+<td align="right">5</td>
+<td align="right">4</td>
+<td align="left">Citizen Kane (1941)</td>
+</tr>
+<tr class="even">
+<td align="right">686</td>
+<td align="left">12-18</td>
+<td align="right">5</td>
+<td align="right">4</td>
+<td align="left">Perfect World, A (1993)</td>
+</tr>
+<tr class="odd">
+<td align="right">113</td>
+<td align="left">18-30</td>
+<td align="right">5</td>
+<td align="right">2</td>
+<td align="left">Horseman on the Roof, The (Hussard sur le toit, Le) (1995)</td>
+</tr>
+<tr class="even">
+<td align="right">119</td>
+<td align="left">18-30</td>
+<td align="right">5</td>
+<td align="right">2</td>
+<td align="left">Maya Lin: A Strong Clear Vision (1994)</td>
+</tr>
+<tr class="odd">
+<td align="right">1189</td>
+<td align="left">18-30</td>
+<td align="right">5</td>
+<td align="right">2</td>
+<td align="left">Prefontaine (1997)</td>
+</tr>
+<tr class="even">
+<td align="right">851</td>
+<td align="left">30-50</td>
+<td align="right">5</td>
+<td align="right">2</td>
+<td align="left">Two or Three Things I Know About Her (1966)</td>
+</tr>
+<tr class="odd">
+<td align="right">1367</td>
+<td align="left">30-50</td>
+<td align="right">5</td>
+<td align="right">2</td>
+<td align="left">Faust (1994)</td>
+</tr>
+<tr class="even">
+<td align="right">814</td>
+<td align="left">30-50</td>
+<td align="right">5</td>
+<td align="right">1</td>
+<td align="left">Great Day in Harlem, A (1994)</td>
+</tr>
+<tr class="odd">
+<td align="right">1558</td>
+<td align="left">50+</td>
+<td align="right">5</td>
+<td align="right">3</td>
+<td align="left">Aparajito (1956)</td>
+</tr>
+<tr class="even">
+<td align="right">1512</td>
+<td align="left">50+</td>
+<td align="right">5</td>
+<td align="right">2</td>
+<td align="left">World of Apu, The (Apur Sansar) (1959)</td>
+</tr>
+<tr class="odd">
+<td align="right">253</td>
+<td align="left">50+</td>
+<td align="right">5</td>
+<td align="right">1</td>
+<td align="left">Pillow Book, The (1995)</td>
+</tr>
+</tbody>
+</table>
 </div>
 <div id="top-3-genres-released-in-summer" class="section level4">
 <h4>Top 3 Genres released in Summer</h4>
@@ -572,7 +1626,122 @@ Top3Genre_Summer&lt;-Top3Genre_Summer[with(Top3Genre_Summer,order(-mean_rating,-
 # pick top 3 
 
 Top3Genre_Summer&lt;-head(Top3Genre_Summer,n = 3) 
-rownames(Top3Genre_Summer)&lt;-NULL</code></pre>
+rownames(Top3Genre_Summer)&lt;-NULL
+
+knitr::kable(Top3Genre_Summer,caption = &quot;Top 3 Genres released in Summer&quot;)</code></pre>
+<table>
+<caption>Top 3 Genres released in Summer</caption>
+<thead>
+<tr class="header">
+<th align="left">genre_transformed</th>
+<th align="right">mean_rating</th>
+<th align="right">Count_Item_ID</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Crime</td>
+<td align="right">3.477157</td>
+<td align="right">197</td>
+</tr>
+<tr class="even">
+<td align="left">War</td>
+<td align="right">3.455172</td>
+<td align="right">145</td>
+</tr>
+<tr class="odd">
+<td align="left">Documentary</td>
+<td align="right">3.455000</td>
+<td align="right">200</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="for-each-genre-co-occuring-top2-genre" class="section level4">
+<h4>For each genre, co-occuring (top2) genre</h4>
+<pre class="r"><code># correlation matrix would give us what genres are closed to what genres 
+Correlation_Matrix&lt;-cor(U.Item[,5:23])
+Correlation_Matrix&lt;-as.data.frame(Correlation_Matrix)
+
+find_co_occuring&lt;-function(cname)
+{
+  top2&lt;-tail(head(with(Correlation_Matrix,order(-cname)),n=3),n = 2)
+  rownames(Correlation_Matrix)[top2]
+}
+
+Top2CoOccuring&lt;-apply(Correlation_Matrix, 2, find_co_occuring)
+
+knitr::kable(Top2CoOccuring,caption = &quot;Top 2 Co-Occuring Genres for each genre&quot;)</code></pre>
+<table>
+<caption>Top 2 Co-Occuring Genres for each genre</caption>
+<thead>
+<tr class="header">
+<th align="left">unknown</th>
+<th align="left">Action</th>
+<th align="left">Adventure</th>
+<th align="left">Animation</th>
+<th align="left">Children.s</th>
+<th align="left">Comedy</th>
+<th align="left">Crime</th>
+<th align="left">Documentary</th>
+<th align="left">Drama</th>
+<th align="left">Fantasy</th>
+<th align="left">Film.Noir</th>
+<th align="left">Horror</th>
+<th align="left">Musical</th>
+<th align="left">Mystery</th>
+<th align="left">Romance</th>
+<th align="left">Sci.Fi</th>
+<th align="left">Thriller</th>
+<th align="left">War</th>
+<th align="left">Western</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Fantasy</td>
+<td align="left">Adventure</td>
+<td align="left">Action</td>
+<td align="left">Children.s</td>
+<td align="left">Animation</td>
+<td align="left">Romance</td>
+<td align="left">Film.Noir</td>
+<td align="left">unknown</td>
+<td align="left">War</td>
+<td align="left">Children.s</td>
+<td align="left">Crime</td>
+<td align="left">Sci.Fi</td>
+<td align="left">Animation</td>
+<td align="left">Thriller</td>
+<td align="left">Comedy</td>
+<td align="left">Action</td>
+<td align="left">Action</td>
+<td align="left">Action</td>
+<td align="left">Action</td>
+</tr>
+<tr class="even">
+<td align="left">Film.Noir</td>
+<td align="left">Sci.Fi</td>
+<td align="left">Children.s</td>
+<td align="left">Musical</td>
+<td align="left">Fantasy</td>
+<td align="left">Musical</td>
+<td align="left">Thriller</td>
+<td align="left">War</td>
+<td align="left">Crime</td>
+<td align="left">Adventure</td>
+<td align="left">Mystery</td>
+<td align="left">Thriller</td>
+<td align="left">Children.s</td>
+<td align="left">Film.Noir</td>
+<td align="left">War</td>
+<td align="left">Adventure</td>
+<td align="left">Mystery</td>
+<td align="left">Sci.Fi</td>
+<td align="left">Adventure</td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
 
