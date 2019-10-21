@@ -250,9 +250,23 @@ rownames(Top3Genre_Summer)<-NULL
 
 ```
 
-
+#### For each genre, co-occuring (top2) genre 
 
 ```{r}
+
+# correlation matrix would give us what genres are closed to what genres 
+Correlation_Matrix<-cor(U.Item[,5:23])
+Correlation_Matrix<-as.data.frame(Correlation_Matrix)
+
+find_co_occuring<-function(cname)
+{
+  top2<-tail(head(with(Correlation_Matrix,order(-cname)),n=3),n = 2)
+  rownames(Correlation_Matrix)[top2]
+}
+
+Top2CoOccuring<-apply(Correlation_Matrix, 2, find_co_occuring)
+
+
 
 ```
 
