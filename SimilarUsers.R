@@ -1,5 +1,21 @@
+U.Data<-read.csv("http://files.grouplens.org/datasets/movielens/ml-100k/u.data",header = FALSE,sep = "\t",col.names = c("User_ID","Item_ID","Rating","TimeStamp"))
+
+U.Item<-read.csv("http://files.grouplens.org/datasets/movielens/ml-100k/u.item",header=FALSE,sep="|",col.names = c("movie_id","movie_title","release_date","video_release_date","IMDb URL", "unknown","Action","Adventure","Animation","Children's","Comedy","Crime",    "Documentary","Drama","Fantasy","Film-Noir","Horror","Musical","Mystery","Romance"     ,"Sci-Fi","Thriller","War","Western"),as.is = TRUE)
+
+U.User<-read.csv("http://files.grouplens.org/datasets/movielens/ml-100k/u.user",header=FALSE,sep="|",col.names = c("User_ID","age","gender","occupation","zip code"))
+
+
+U.Genres<-read.csv("http://files.grouplens.org/datasets/movielens/ml-100k/u.genre",header=FALSE,sep="|",col.names = c("genre","Number"))
+
+
+
+
+
+
 # Create rating matrix for users and movies where the rows correspond to the users and columns denote the movies
 #and the cells denote the rating given by a user for a movie.
+
+
 
 library(reshape2)
 rating_matrix <- dcast(U.Data, User_ID~Item_ID, value.var = "Rating", na.rm=FALSE)
