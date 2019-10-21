@@ -1,23 +1,5 @@
----
-title: "Oracle"
-author: "Aadish Chopra"
-date: "10/20/2019"
-output: html_document
----
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE,message = FALSE,warning = FALSE)
-
-library(knitr)
-
-```
-
-# Loading Data
-
-1.  [Links are used to extract the data](files.grouplens.org/datasets/movielens/)
-2. Column Names from the readme file
-
-```{r}
+## ------------------------------------------------------------------------
 
 U.Data<-read.csv("http://files.grouplens.org/datasets/movielens/ml-100k/u.data",header = FALSE,sep = "\t",col.names = c("User_ID","Item_ID","Rating","TimeStamp"))
 
@@ -29,34 +11,17 @@ U.User<-read.csv("http://files.grouplens.org/datasets/movielens/ml-100k/u.user",
 U.Genres<-read.csv("http://files.grouplens.org/datasets/movielens/ml-100k/u.genre",header=FALSE,sep="|",col.names = c("genre","Number"))
 
 
-```
 
-1. Remove Video Release date as it has no data
 
-```{r}
+## ------------------------------------------------------------------------
 #Remove "Video Release date" as it has no data
 
 #sum(is.na(U.Item[,4]))
 U.Item<-U.Item[,-4]
 
-```
-
-Number of missing values in video_release_date is `r sum(is.na(U.Item[,4]))`
-
-# Programming Assignments
-
-Assumptions:
-
-> Average Rating to be the selection criterion (higher is better).
-
-> Ties are broken by counts. 
-
-> Secondary level ties are ignored and the item which comes first is selected
-
-#### Top 3 movies by Occupation
 
 
-```{r}
+## ------------------------------------------------------------------------
 #merge the dataset
 
 UData_User<-merge(U.Data,y = U.User,by = "User_ID")
@@ -85,14 +50,12 @@ rownames(Top3Occupation)<-NULL
 
 Top3Occupation<-merge(Top3Occupation,U.Item[,1:2],by.x = "Item_ID",by.y = "movie_id",sort = FALSE)
 Top3Occupation<-Top3Occupation[with(Top3Occupation,order(occupation,-mean_rating,-Count_Item_ID)),]
-knitr::kable(Top3Occupation,caption = "Top 3 Movies by Occupation")
+
 write.csv(x = Top3Occupation,file = "Top3Occupation.csv")
 
-```
 
-#### Top 3 movies by Genre
 
-```{r}
+## ------------------------------------------------------------------------
 
 #reversing one-hot encoding to match to the dataset
 
@@ -101,13 +64,9 @@ rev_one_hot$genre_transformed<-names(U.Item[,5:23])[rev_one_hot[order(rev_one_ho
 Genre<-merge(U.Item,rev_one_hot,by.x = "movie_id",by.y = "row")
 
 
-```
 
 
-Selecting relevant columns from Genre
-
-
-```{r}
+## ------------------------------------------------------------------------
 # merging Genre with UData on Item Id 
 UGenre<-Genre[,c(1,2,25)]
 UGenreUser<-merge(UGenre,U.Data,by.x ="movie_id",by.y = "Item_ID" )
@@ -134,19 +93,13 @@ Top3Genre<-by(Top3Genre,list(Top3Genre$genre_transformed),head,n=3)
 Top3Genre<-do.call(rbind.data.frame,Top3Genre)
 rownames(Top3Genre)<-NULL
 
-knitr::kable(Top3Genre,caption = "Top 3 Movies by Genre")
+
 write.csv(x = Top3Genre,file = "Top3Genre.csv")
 
 
-```
 
 
-#### Top 3 movies by Occupation,Genre
-
-<span style="color:red">Dataset created in **Top 3 Movies by Genre** is reused</span>
-
-
-```{r}
+## ------------------------------------------------------------------------
 # merging data 
 
 UGenreUser_Occupation<-merge(UGenreUser,U.User,by="User_ID")
@@ -168,17 +121,11 @@ Top3OccupationGenre<-Top3OccupationGenre[with(Top3OccupationGenre,order(occupati
 
 Top3OccupationGenre<-aggregate(Top3OccupationGenre,by=list(Top3OccupationGenre$occupation,Top3OccupationGenre$genre_transformed),FUN = head,n=3)
 
-kable(Top3OccupationGenre,caption = "Top 3 Movies by Occupation, Genre")
-
-```
 
 
-For occupation and genre data has been formatted so that the top 3 movies are shown with their items ids. 
-
-#### Top 3 Movies by Age Group 
 
 
-```{r}
+## ------------------------------------------------------------------------
 
 # find the oldest user
 
@@ -218,18 +165,12 @@ Top3Age_Group<-merge(Top3Age_Group,U.Item[,1:2],by.x = "Item_ID",by.y = "movie_i
 Top3Age_Group<-Top3Age_Group[with(Top3Age_Group,order(age_bracket,-mean_rating,-Count_Item_ID)),]
 
 
-knitr::kable(Top3Age_Group,caption = "Top 3 Movies by Age group")
+
 write.csv(x = Top3Age_Group,file = "Top3Age_Group.csv")
 
-```
 
 
-#### Top 3 Genres released in Summer 
-
-Using the release date column to find movies released in Summer
-
-
-```{r}
+## ------------------------------------------------------------------------
 
 #subsetting the data frame by selecting movies released in Summer
 
@@ -261,14 +202,12 @@ Top3Genre_Summer<-Top3Genre_Summer[with(Top3Genre_Summer,order(-mean_rating,-Cou
 Top3Genre_Summer<-head(Top3Genre_Summer,n = 3) 
 rownames(Top3Genre_Summer)<-NULL
 
-knitr::kable(Top3Genre_Summer,caption = "Top 3 Genres released in Summer")
+
 write.csv(x = Top3Genre_Summer,file = "Top3Genre_Summer.csv")
 
-```
 
-#### For each genre, co-occuring (top2) genre 
 
-```{r}
+## ------------------------------------------------------------------------
 
 # correlation matrix would give us what genres are closed to what genres 
 Correlation_Matrix<-cor(U.Item[,5:23])
@@ -282,11 +221,7 @@ find_co_occuring<-function(cname)
 
 Top2CoOccuring<-apply(Correlation_Matrix, 2, find_co_occuring)
 
-knitr::kable(Top2CoOccuring,caption = "Top 2 Co-Occuring Genres for each genre")
+
 write.csv(x = Top2CoOccuring,file = "Top2CoOccuring.csv")
 
-```
-
-
-This means that whenever the movie has been rated for action it has also been rated for Adventure and Sci-Fi
 
