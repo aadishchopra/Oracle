@@ -1,22 +1,43 @@
 from pyvis.network import Network
-
+import pandas as pd
 net = Network()
 
-net.add_node(1, label="Node 1") # node id = 1 and label = Node 1
-net.add_node(2) # node id and label = 2
+#Building Org Hierarchy
 
-nodes = ["a", "b", "c", "d"]
-net.add_nodes(nodes) # node ids and labels = ["a", "b", "c", "d"]
-net.add_nodes("hello") # node ids and labels = ["h", "e", "l", "o"]
+#Step 1 --> Read Data
+df=pd.read_csv("D:\PythonProjects\Data\OrgHierarchyNames.csv")
 
-net.add_nodes(["a", "b", "c"])
-net.get_node("c")
-{'id': 'c', 'label': 'c', 'shape': 'dot'}
+#Find unique Employees (Nodes)
 
-net.show('nx.html')
+uniqval=df.apply(pd.unique)
+arr=[]
+for items in uniqval:
+    for i in items:
+        arr.append(i)
+arr = [x for x in arr if pd.notnull(x)]
+nodes=set(arr)
 
-git remote set-url origin https://github.com/aadishchopra/repository.git
+#Find relationship among employees (Edges)
 
-ssh-add ~/.ssh/id_rsa
+#Hierarchy depth
+hdepth=len(df.columns)-1
+colnames=df.columns
 
-ssh-keygen -t ed25519 -C "aadishchopra@rediffmail.com"
+
+rel=[]
+i=0
+while (i<hdepth):
+    rel.append(list(zip(df[colnames[i]], df[colnames[i+1]])))
+    i += 1
+
+
+refinedrel=[]
+for i in range(hdepth):
+    for a,b in rel[i]:
+        if(str(a) != 'nan' and str(b) !='nan'):
+            refinedrel.append(tuple([a,b]))
+
+edges=set(refinedrel)
+
+
+
