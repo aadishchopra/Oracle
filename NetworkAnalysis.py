@@ -39,5 +39,55 @@ for i in range(hdepth):
 
 edges=set(refinedrel)
 
+##Constructing an organizational graph
+
+
+
+
+options = """
+var options = {
+  "nodes": {
+    "fixed": {
+      "x": true,
+      "y": true
+    },
+    "shape": "box",
+    "shapeProperties": {
+      "interpolation": false
+    }
+  },
+  "edges": {
+    "arrows": {
+      "to": {
+        "enabled": true
+      }
+    },
+    "color": {
+      "inherit": true
+    },
+    "smooth": false
+  },
+  "layout": {
+    "hierarchical": {
+      "enabled": true,
+      "levelSeparation": -150,
+      "direction": "RL",
+      "sortMethod": "directed"
+    }
+  },
+  "physics": {
+    "enabled": false,
+    "hierarchicalRepulsion": {
+      "centralGravity": 0
+    },
+    "minVelocity": 0.75,
+    "solver": "hierarchicalRepulsion"
+  }
+}
+"""
+net.set_options(options)
+net.add_nodes(nodes)
+net.add_edges(edges)
+net.show('new_nx.html')
 
 
